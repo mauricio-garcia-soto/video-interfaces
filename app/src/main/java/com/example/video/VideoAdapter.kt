@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.video.databinding.ViewMovieItemBinding
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
-
-class VideoAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<VideoAdapter.ViewHolder>() {
+interface MovieClickListener{
+    fun onMovieClick(movie: Movie)
+}
+class VideoAdapter(private val movies: List<Movie>, private val movieClickListener: MovieClickListener) : RecyclerView.Adapter<VideoAdapter.ViewHolder>() {
     class ViewHolder(private val binding: ViewMovieItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(movie: Movie) {
             binding.textView.text = movie.title
@@ -28,7 +30,11 @@ class VideoAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<Video
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(movies[position])
+        val movie = movies[position]
+        holder.bind(movie)
+        holder.itemView.setOnClickListener {
+            movieClickListener.onMovieClick(movie)
+        }
     }
 
     override fun getItemCount(): Int {
